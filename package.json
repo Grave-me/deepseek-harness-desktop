@@ -1,0 +1,92 @@
+{
+  "name": "deepseek-harness-desktop",
+  "version": "0.1.0",
+  "description": "Windows desktop host for the official DeepSeek Harness Web UI",
+  "author": "DeepSeek Harness Desktop contributors",
+  "private": true,
+  "type": "module",
+  "main": "out/src/main/index.js",
+  "license": "MIT",
+  "engines": {
+    "node": "24.18.0"
+  },
+  "allowScripts": {
+    "electron-winstaller": false
+  },
+  "scripts": {
+    "clean": "node scripts/clean.mjs",
+    "prepare:node": "node scripts/acquire-node.mjs",
+    "prepare:electron": "node node_modules/electron/install.js",
+    "prepare:sidecar": "node scripts/npm-ci-sidecar.mjs && node scripts/prepare-sidecar.mjs",
+    "prepare:resources": "npm run prepare:node && npm run prepare:sidecar && node scripts/generate-third-party.mjs",
+    "build": "npm run clean && tsc -p tsconfig.json && node scripts/copy-static.mjs",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node --test out/tests/*.test.js",
+    "test:unit": "npm run test",
+    "smoke:sidecar": "node scripts/smoke-sidecar.mjs",
+    "smoke:external": "node scripts/smoke-external.mjs",
+    "smoke:electron": "node scripts/smoke-electron.mjs",
+    "smoke:packaged": "node scripts/smoke-electron.mjs --packaged",
+    "smoke:cycles": "node scripts/smoke-cycles.mjs",
+    "pack:dir": "npm run prepare:electron && npm run prepare:resources && npm run test && node scripts/build-windows.mjs dir",
+    "dist:win": "npm run prepare:electron && npm run prepare:resources && npm run test && node scripts/build-windows.mjs nsis && node scripts/hash-artifacts.mjs",
+    "start": "npm run build && electron ."
+  },
+  "devDependencies": {
+    "@types/node": "24.10.13",
+    "electron": "43.2.0",
+    "electron-builder": "26.15.3",
+    "typescript": "6.0.3"
+  },
+  "build": {
+    "appId": "com.yuwang.deepseek-harness-desktop",
+    "productName": "DeepSeek Harness Desktop",
+    "electronDist": "node_modules/electron/dist",
+    "artifactName": "DeepSeek-Harness-Desktop-${version}-${arch}-Setup.${ext}",
+    "directories": {
+      "output": "artifacts",
+      "buildResources": "build"
+    },
+    "files": [
+      "out/**/*",
+      "package.json",
+      "LICENSE",
+      "THIRD_PARTY_NOTICES.md",
+      "VERSIONS.json",
+      "SBOM.spdx.json",
+      "KNOWN_LIMITATIONS.md",
+      "README.md"
+    ],
+    "extraResources": [
+      {
+        "from": "build/runtime/node",
+        "to": "runtime/node"
+      },
+      {
+        "from": "build/runtime/sidecar",
+        "to": "runtime/sidecar",
+        "filter": ["**/*"]
+      }
+    ],
+    "asar": true,
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "nsis": {
+      "include": "build/installer.nsh",
+      "oneClick": false,
+      "perMachine": false,
+      "allowElevation": false,
+      "allowToChangeInstallationDirectory": false,
+      "createStartMenuShortcut": true,
+      "createDesktopShortcut": true,
+      "deleteAppDataOnUninstall": false,
+      "runAfterFinish": true
+    }
+  }
+}

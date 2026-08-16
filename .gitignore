@@ -1,0 +1,14 @@
+node_modules/
+sidecar/node_modules/
+out/
+dist/
+release/
+build/runtime/
+build/cache/
+.npm-cache/
+*.log
+*.sha256
+release-candidate/
+*.exe
+*.blockmap
+builder-debug.yml

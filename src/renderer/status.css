@@ -1,0 +1,12 @@
+:root { color-scheme: light dark; font-family: "Segoe UI", system-ui, sans-serif; background: #f5f7fb; color: #172033; }
+body { margin: 0; min-height: 100vh; display: grid; place-items: center; }
+main { width: min(560px, calc(100vw - 64px)); padding: 48px; box-sizing: border-box; background: white; border: 1px solid #e5e9f2; border-radius: 18px; box-shadow: 0 18px 50px rgba(23, 32, 51, .09); text-align: center; }
+.mark { width: 54px; height: 54px; margin: 0 auto 20px; display: grid; place-items: center; border-radius: 15px; background: #2867f0; color: white; font-weight: 700; font-size: 26px; }
+h1 { margin: 0 0 22px; font-size: 26px; }
+p { line-height: 1.6; }
+.details { color: #68738a; font-size: 13px; }
+.actions { margin-top: 28px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+button { border: 0; border-radius: 8px; padding: 10px 15px; background: #2867f0; color: white; font: inherit; cursor: pointer; }
+button.secondary { background: #e9edf5; color: #313b50; }
+button:disabled { opacity: .5; cursor: wait; }
+@media (prefers-color-scheme: dark) { :root { background: #11151d; color: #ecf1fb; } main { background: #191f2a; border-color: #2c3442; } .details { color: #9da8ba; } button.secondary { background: #30394a; color: #eef2f9; } }
